@@ -183,7 +183,6 @@ def loss_fn(batch, model):
     logits = logits.view(bs * l, c)
     targets = batch['labels'].view(bs * l)
     label_token_weights = batch['label_token_weights'].view(bs * l)
-
     targets.requires_grad_(True)
     # print("start calculating loss")
     # import pdb
@@ -192,7 +191,6 @@ def loss_fn(batch, model):
         logits=logits,
         target=targets
     )
-
     return ((loss * label_token_weights).sum() / label_token_weights.sum())
 
 
@@ -304,11 +302,14 @@ def generate(
 
         while len(token_ids) <= model_max_length:
             # BEGIN ASSIGN3_4
-            # TODO
             # run the model with current token_ids, and predict the next token (gen_id)
             # hint: obtain the logits of next token, and take the argmax.
             gen_id = 0
-            raise NotImplementedError("Generation Function Not Implemented Yet")
+            token_np = np.array(token_ids)
+            token_tensor = minitorch.tensor_from_numpy(token_np, backend).contiguous().view(1, token_np.shape[0])
+            logits = model(idx=token_tensor)
+            last = logits.to_numpy()[:, -1, :]
+            gen_id = int(np.argmax(last, -1)[0])
             # END ASSIGN3_4
 
             if gen_id == tokenizer.vocab[f'<eos_{tgt_key}>']:
@@ -345,9 +346,9 @@ def main(
     model_max_length=40,
     n_epochs=20,
     batch_size=128,
-    learning_rate=0.02,
+    learning_rate=1e-3,
     samples_per_epoch=20000,
-    n_vocab=10000,
+    n_vocab=12000,
     n_embd=256,
     seed=11111
 ):
