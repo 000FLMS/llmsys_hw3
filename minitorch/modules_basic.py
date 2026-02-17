@@ -100,9 +100,9 @@ class Linear(Module):
         self.out_size = out_size
         ### BEGIN ASSIGN3_2
         w_numpy = np.random.uniform(-in_size ** (-0.5), in_size ** (-0.5), (in_size, out_size))
-        bias_numpy = np.random.uniform(-in_size ** (-0.5), in_size ** (-0.5), (in_size,))
-        self.weights = tensor_from_numpy(w_numpy, backend, True)
-        self.bias = tensor_from_numpy(bias_numpy, backend, True) if bias else None
+        bias_numpy = np.random.uniform(-out_size ** (-0.5), out_size ** (-0.5), (out_size,))
+        self.weights = Parameter(tensor_from_numpy(w_numpy, backend, True))
+        self.bias = Parameter(tensor_from_numpy(bias_numpy, backend, True)) if bias else None
         self.out_size = out_size
         ### END ASSIGN3_2
 

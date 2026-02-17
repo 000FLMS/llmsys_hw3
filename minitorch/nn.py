@@ -212,7 +212,6 @@ def logsumexp(input: Tensor, dim: int) -> Tensor:
     """  
     ### BEGIN ASSIGN3_1
     mx = Max.apply(input, tensor([dim]))
-    print(input.shape, mx.shape)
     lse = mx + (input - mx).exp().sum(dim=dim).log()
     return lse
     ### END ASSIGN3_1
